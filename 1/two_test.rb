@@ -6,12 +6,18 @@ require 'test/unit'
 class TestTwo < Test::Unit::TestCase
 
     def test_add
-        assert_equal([5, 3], add([4, 3], [1, 0]))
+        assert_equal(Coord.new(5, 3),
+                     Coord.new(4, 3) + Coord.new(1, 0))
     end
 
     def test_in_between
-        assert_equal([[0, 1], [0, 2], [0, 3]],
-                     in_between([0, 0], [0, 3], [0, 1]))
+        assert_equal([Coord.new(0, 1), Coord.new(0, 2), Coord.new(0, 3)],
+                     in_between(Coord.new(0, 0), Coord.new(0, 3), Coord.new(0, 1)))
+    end
+
+    def test_include
+        assert(Set.new([Coord.new(0, 0), Coord.new(0, 1)]).include?(Coord.new(0, 1)))
+        assert(! Set.new([Coord.new(0, 0), Coord.new(0, 1)]).include?(Coord.new(1, 0)))
     end
 
     def test_solve

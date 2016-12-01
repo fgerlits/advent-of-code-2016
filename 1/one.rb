@@ -1,19 +1,29 @@
 #!/usr/bin/env ruby
 
+class Coord
+    attr_reader :x, :y
+
+    def initialize(x, y)
+        @x, @y = x, y
+    end
+
+    def ==(other)
+        @x == other.x && @y == other.y
+    end
+end
+
 def rotate(heading, direction)
-    x, y = heading
     case direction
     when 'L'
-        [-y, x]
+        Coord.new(-heading.y, heading.x)
     when 'R'
-        [y, -x]
+        Coord.new(heading.y, -heading.x)
     end
 end
 
 def take_steps(position, heading, count)
-    x, y = position
-    dx, dy = heading
-    [x + count * dx, y + count * dy]
+    Coord.new(position.x + count * heading.x,
+              position.y + count * heading.y)
 end
 
 class State
@@ -32,13 +42,11 @@ class State
 end
 
 def distance(from, to)
-    x1, y1 = from
-    x2, y2 = to
-    (x1 - x2).abs + (y1 - y2).abs
+    (from.x - to.x).abs + (from.y - to.y).abs
 end
 
 def solve(steps)
-    initial = State.new([0, 0], [0, 1])
+    initial = State.new(Coord.new(0, 0), Coord.new(0, 1))
     final = steps.split(', ').reduce(initial) do |state, step|
         state.move(step)
     end

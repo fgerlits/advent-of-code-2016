@@ -3,24 +3,32 @@
 require_relative 'one'
 require 'set'
 
-def add(position, heading)
-    x, y = position
-    dx, dy = heading
-    [x + dx, y + dy]
+class Coord
+    def +(other)
+        Coord.new(@x + other.x, @y + other.y)
+    end
+
+    def eql?(other)
+        self == other
+    end
+
+    def hash
+        [@x, @y].hash
+    end
 end
 
 def in_between(from, to, heading)
     result = []
     position = from
     while position != to
-        position = add(position, heading)
+        position = position + heading
         result << position
     end
     result
 end
 
 def solve(steps)
-    initial = State.new([0, 0], [0, 1])
+    initial = State.new(Coord.new(0, 0), Coord.new(0, 1))
     visited = Set.new
     visited << initial.position
     steps.split(', ').reduce(initial) do |state, step|
