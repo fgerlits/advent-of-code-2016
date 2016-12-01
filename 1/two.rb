@@ -3,20 +3,6 @@
 require_relative 'one'
 require 'set'
 
-class Coord
-    def +(other)
-        Coord.new(@x + other.x, @y + other.y)
-    end
-
-    def eql?(other)
-        self == other
-    end
-
-    def hash
-        [@x, @y].hash
-    end
-end
-
 def in_between(from, to, heading)
     result = []
     position = from
