@@ -7,7 +7,7 @@ def in_between(from, to, heading)
     result = []
     position = from
     while position != to
-        position = position + heading
+        position += heading
         result << position
     end
     result
