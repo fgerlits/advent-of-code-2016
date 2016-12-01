@@ -23,7 +23,7 @@ def solve(steps)
     initial = State.new([0, 0], [0, 1])
     visited = Set.new
     visited << initial.position
-    steps.reduce(initial) do |state, step|
+    steps.split(', ').reduce(initial) do |state, step|
         new_state = state.move(step)
         in_between(state.position, new_state.position, new_state.heading).each do |position|
             if visited.include?(position)
@@ -38,5 +38,5 @@ def solve(steps)
 end
 
 if __FILE__ == $0
-    puts solve(ARGF.read.split(', '))
+    puts solve(ARGF.read)
 end

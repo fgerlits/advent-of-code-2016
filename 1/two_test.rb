@@ -15,7 +15,7 @@ class TestTwo < Test::Unit::TestCase
     end
 
     def test_solve
-        assert_equal(4, solve(['R8', 'R4', 'R4', 'R8']))
+        assert_equal(4, solve('R8, R4, R4, R8'))
     end
 
 end
