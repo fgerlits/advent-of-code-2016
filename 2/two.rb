@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require_relative '../coord'
+
 class Keypad
     TABLE = ['.......',
              '...1...',
@@ -10,27 +12,30 @@ class Keypad
              '.......']
 
     def initialize
-        @x, @y = 3, 1
+        @position = Coord.new(3, 1)
     end
 
     def direction_to_move(direction)
         case direction
         when 'U'
-            [-1, 0]
+            Coord.new(-1, 0)
         when 'D'
-            [1, 0]
+            Coord.new(1, 0)
         when 'L'
-            [0, -1]
+            Coord.new(0, -1)
         when 'R'
-            [0, 1]
+            Coord.new(0, 1)
         end
     end
 
+    def value_at(position)
+        TABLE[position.x][position.y]
+    end
+
     def move_one!(direction)
-        dx, dy = direction_to_move(direction)
-        if TABLE[@x + dx][@y + dy] != '.'
-            @x += dx
-            @y += dy
+        new_position = @position + direction_to_move(direction)
+        if value_at(new_position) != '.'
+            @position = new_position
         end
         self
     end
@@ -43,7 +48,7 @@ class Keypad
     end
 
     def value
-        TABLE[@x][@y]
+        value_at(@position)
     end
 end
 
