@@ -6,7 +6,6 @@ require 'test/unit'
 class TestOne < Test::Unit::TestCase
 
     def test_
-
     end
 
 end
