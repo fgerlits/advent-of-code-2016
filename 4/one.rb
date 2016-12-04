@@ -15,9 +15,8 @@ def sector_id(input)
 end
 
 def frequencies(word)
-    word.each_char.reduce(Hash.new(0)) do |hash, c|
-        hash[c] += 1
-        hash
+    word.each_char.each_with_object(Hash.new(0)) do |c, freqs|
+        freqs[c] += 1
     end
 end
 
@@ -34,5 +33,5 @@ if __FILE__ == $0
     input = ARGF.readlines
     puts input.select{|line| is_real_room(line)} \
               .map{|line| sector_id(line)} \
-              .inject(:+)
+              .reduce(:+)
 end
