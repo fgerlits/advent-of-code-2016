@@ -1,4 +1,4 @@
-// compile with: g++ --std=c++11 -O3 ./solve.cpp -lcrypto
+// compile with: g++ --std=c++11 -O3 ./one.cpp -lcrypto
 
 #include "one.h"
 
