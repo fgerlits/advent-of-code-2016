@@ -9,7 +9,7 @@ int main(int argc, char * argv[])
 
   int n = 0;
   for (int i = 0; i < 8; ++i) {
-      std::cout << nextSolutionChar(input, n) << std::flush;
+      std::cout << nextHashWithFiveZeros(input, n)[5] << std::flush;
   }
   std::cout << std::endl;
 

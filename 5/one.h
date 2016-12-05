@@ -33,13 +33,12 @@ std::string format(const std::string & input) {
   return ss.str();
 }
 
-char nextSolutionChar(const std::string & input, int & n) {
+std::string nextHashWithFiveZeros(const std::string & input, int & n) {
   size_t numZeros = 0;
   do {
     std::string md5 = createMd5(input + std::to_string(n));
     numZeros = countLeadingZeros(md5);
     ++n;
   } while (numZeros < 5);
-  std::string hash = format(createMd5(input + std::to_string(n - 1)));
-  return hash[5];
+  return format(createMd5(input + std::to_string(n - 1)));
 }
