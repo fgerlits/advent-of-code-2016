@@ -35,10 +35,11 @@ std::string format(const std::string & input) {
 
 std::string nextHashWithFiveZeros(const std::string & input, int & n) {
   size_t numZeros = 0;
+  std::string md5;
   do {
-    std::string md5 = createMd5(input + std::to_string(n));
+    md5 = createMd5(input + std::to_string(n));
     numZeros = countLeadingZeros(md5);
     ++n;
   } while (numZeros < 5);
-  return format(createMd5(input + std::to_string(n - 1)));
+  return format(md5);
 }
