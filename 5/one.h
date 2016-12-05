@@ -15,11 +15,11 @@ std::string createMd5(const std::string & input) {
 size_t countLeadingZeros(const std::string & input) {
   size_t numZeros = 0;
   size_t i = 0;
-  while (i < input.size() && input[i] == '\0') {
+  while (i < input.size() && input[i] == '\x0') {
     numZeros += 2;
     ++i;
   }
-  if (i < input.size() && (unsigned char)(input[i]) < '\020') {
+  if (i < input.size() && (unsigned char)(input[i]) < '\x10') {
     numZeros += 1;
   }
   return numZeros;
