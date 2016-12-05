@@ -4,8 +4,6 @@
 
 int main(int argc, char * argv[])
 {
-  bool debug = (argc > 1);
-
   std::string input;
   std::cin >> input;
 
