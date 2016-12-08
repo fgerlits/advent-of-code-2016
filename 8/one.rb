@@ -62,10 +62,16 @@ class Instruction
     end
 end
 
-if __FILE__ == $0
-    tiny_screen = TinyScreen.new(50, 6)
-    ARGF.readlines.each_with_object(tiny_screen) do |line|
-        Instruction.new(line.chomp).apply(tiny_screen)
+def process_input(stream)
+    stream.readlines.map{|line| Instruction.new(line.chomp)}
+end
+
+def apply_instructions(instructions)
+    instructions.each_with_object(TinyScreen.new(50, 6)) do |instruction, tiny_screen|
+        instruction.apply(tiny_screen)
     end
-    puts tiny_screen.count_lit_pixels
+end
+
+if __FILE__ == $0
+    puts apply_instructions(process_input(ARGF)).count_lit_pixels
 end
