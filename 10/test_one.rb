@@ -14,81 +14,65 @@ EOF
 
 class TestOne < Test::Unit::TestCase
 
-    def test_process_input
-        assert_equal [{2 => [2, 5], 1 => [3]},
-                      {2 => [['bot', 1], ['bot', 0]],
-                       1 => [['output', 1], ['bot', 0]],
-                       0 => [['output', 2], ['output', 0]]}],
-                     process_input(SAMPLE_RULES)
-    end
-        
-end
-
-class TestGiveTo < Test::Unit::TestCase
-
     def setup
-        @bot_has = {}
-        @output = {}
+        @state = Bots.new(SAMPLE_RULES)
+    end
+
+    def test_initialize
+        assert_equal({2 => [2, 5], 1 => [3]}, @state.bot_has)
+        assert_equal({2 => [['bot', 1], ['bot', 0]],
+                      1 => [['output', 1], ['bot', 0]],
+                      0 => [['output', 2], ['output', 0]]},
+                     @state.handoff_rules)
+        assert_equal({}, @state.output)
     end
 
     def test_give_to_bot
-        give_to(1, ['bot', 2], @bot_has, @output)
-        assert_equal({2 => [1]}, @bot_has)
-        assert_equal({}, @output)
+        @state.give_to(15, ['bot', 12])
+        assert_equal([15], @state.bot_has[12])
+        assert_equal({}, @state.output)
     end
 
     def test_give_to_bot_again
-        give_to(5, ['bot', 2], @bot_has, @output)
-        give_to(1, ['bot', 2], @bot_has, @output)
-        assert_equal({2 => [1, 5]}, @bot_has)
-        assert_equal({}, @output)
+        @state.give_to(15, ['bot', 12])
+        @state.give_to(11, ['bot', 12])
+        assert_equal([11, 15], @state.bot_has[12])
+        assert_equal({}, @state.output)
     end
 
     def test_give_too_many_chips_to_bot
-        give_to(5, ['bot', 2], @bot_has, @output)
-        give_to(1, ['bot', 2], @bot_has, @output)
-        assert_raise { give_to(7, ['bot', 2], @bot_has, @output) }
+        @state.give_to(15, ['bot', 12])
+        @state.give_to(11, ['bot', 12])
+        assert_raise { give_to(17, ['bot', 12]) }
     end
 
     def test_give_to_output
-        give_to(1, ['output', 2], @bot_has, @output)
-        assert_equal({}, @bot_has)
-        assert_equal({2 => [1]}, @output)
+        @state.give_to(1, ['output', 2])
+        assert_equal({2 => [1]}, @state.output)
     end
 
     def test_give_to_output_again
-        give_to(5, ['output', 2], @bot_has, @output)
-        give_to(1, ['output', 2], @bot_has, @output)
-        assert_equal({}, @bot_has)
-        assert_equal({2 => [5, 1]}, @output)
-    end
-
-end
-
-class TestTakeStep < Test::Unit::TestCase
-
-    def setup
-        @bot_has, @handoff_rules = process_input(SAMPLE_RULES)
-        @output = {}
-        assert_equal [{2 => [2, 5], 1 => [3]}, {}], [@bot_has, @output]
+        @state.give_to(5, ['output', 2])
+        @state.give_to(1, ['output', 2])
+        assert_equal({2 => [5, 1]}, @state.output)
     end
 
     def test_take_one_step
-        take_step(@bot_has, @handoff_rules, @output)
-        assert_equal [{2 => [], 1 => [2, 3], 0 => [5]}, {}],
-                     [@bot_has, @output]
+        @state.take_step
+        assert_equal({2 => [], 1 => [2, 3], 0 => [5]}, @state.bot_has)
+        assert_equal({}, @state.output)
     end
 
     def test_take_two_steps
-        2.times { take_step(@bot_has, @handoff_rules, @output) }
-        assert_equal [{2 => [], 1 => [], 0 => [3, 5]}, {1 => [2]}],
-                     [@bot_has, @output]
+        2.times { @state.take_step }
+        assert_equal({2 => [], 1 => [], 0 => [3, 5]}, @state.bot_has)
+        assert_equal({1 => [2]}, @state.output)
     end
 
     def test_take_all_steps
-        take_all_steps(@bot_has, @handoff_rules, @output)
-        assert_equal [{2 => [], 1 => [], 0 => []}, {1 => [2], 2 => [3], 0 => [5]}],
-                     [@bot_has, @output]
+        @state.take_all_steps
+        assert_equal({2 => [], 1 => [], 0 => []}, @state.bot_has)
+        assert_equal({1 => [2], 2 => [3], 0 => [5]}, @state.output)
     end
 
 end
