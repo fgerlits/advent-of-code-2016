@@ -15,7 +15,6 @@ class Bots
                     @handoff_rules[$1.to_i] = [[$2, $3.to_i], [$4, $5.to_i]]
             end
         end
-        bot_has.each{|bot, chips| chips.sort!}
         @output = {}
     end
 
@@ -25,9 +24,7 @@ class Bots
             when 'bot'
                 bot = @bot_has[number] ||= []
                 bot << chip
-                if bot.size == 2
-                    bot.sort!
-                elsif bot.size > 2
+                if bot.size > 2
                     raise "bot #{number} has more than 2 chips: #{bot.inspect}"
                 end
             when 'output'
@@ -39,11 +36,12 @@ class Bots
     def take_step
         @bot_has.select{|bot, chips| chips.size == 2}.each do |bot, chips|
             rule = @handoff_rules[bot]
+            low, high = chips.sort
             puts "bot #{bot} gives " +
-                 "#{chips[0]} to #{rule[0][0]} #{rule[0][1]} and it gives " +
-                 "#{chips[1]} to #{rule[1][0]} #{rule[1][1]}"
-            give_to(chips[0], rule[0])
-            give_to(chips[1], rule[1])
+                 "#{low} to #{rule[0][0]} #{rule[0][1]} and it gives " +
+                 "#{high} to #{rule[1][0]} #{rule[1][1]}"
+            give_to(low, rule[0])
+            give_to(high, rule[1])
             chips.clear
         end.empty?
     end

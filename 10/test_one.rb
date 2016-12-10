@@ -19,7 +19,7 @@ class TestOne < Test::Unit::TestCase
     end
 
     def test_initialize
-        assert_equal({2 => [2, 5], 1 => [3]}, @state.bot_has)
+        assert_equal({2 => [5, 2], 1 => [3]}, @state.bot_has)
         assert_equal({2 => [['bot', 1], ['bot', 0]],
                       1 => [['output', 1], ['bot', 0]],
                       0 => [['output', 2], ['output', 0]]},
@@ -36,7 +36,7 @@ class TestOne < Test::Unit::TestCase
     def test_give_to_bot_again
         @state.give_to(15, ['bot', 12])
         @state.give_to(11, ['bot', 12])
-        assert_equal([11, 15], @state.bot_has[12])
+        assert_equal([15, 11], @state.bot_has[12])
         assert_equal({}, @state.output)
     end
 
@@ -59,13 +59,13 @@ class TestOne < Test::Unit::TestCase
 
     def test_take_one_step
         @state.take_step
-        assert_equal({2 => [], 1 => [2, 3], 0 => [5]}, @state.bot_has)
+        assert_equal({2 => [], 1 => [3, 2], 0 => [5]}, @state.bot_has)
         assert_equal({}, @state.output)
     end
 
     def test_take_two_steps
         2.times { @state.take_step }
-        assert_equal({2 => [], 1 => [], 0 => [3, 5]}, @state.bot_has)
+        assert_equal({2 => [], 1 => [], 0 => [5, 3]}, @state.bot_has)
         assert_equal({1 => [2]}, @state.output)
     end
 
