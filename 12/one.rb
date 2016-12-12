@@ -11,12 +11,14 @@ class Computer
 
     def run
         while @ip >= 0 && @ip < @program.size
-            @program[@ip].apply(self)
+            @program[@ip].instruction.call(self)
         end
     end
 end
 
 class Instruction
+    attr_reader :instruction
+
     def initialize(line)
         case line
             when /cpy (\d+) (\w+)/
@@ -48,10 +50,6 @@ class Instruction
                     end
                 end
         end
-    end
-
-    def apply(computer)
-        @instruction.call(computer)
     end
 end
 
