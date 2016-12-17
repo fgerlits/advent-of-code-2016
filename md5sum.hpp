@@ -1,3 +1,4 @@
+#pragma once
 // compile with: g++ --std=c++11 -O3 ./solve.cpp -lcrypto
 
 #include <openssl/md5.h>
