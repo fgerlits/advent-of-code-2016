@@ -6,24 +6,25 @@ class Elves
         @current_index = 0
         @n = n
         @size = n
+        @next_position = {}
     end
 
     def steal
         victim = steal_position
-        @circle[victim] = nil
+        @next_position[victim] = next_live_index(victim)
         @size -= 1
     end
 
     def next_live_index(position)
-        loop do
-            position += 1
-            if position == @n
-                position = 0
+        position = (position + 1) % @n
+        if ! @next_position[position].nil?
+            starting_dead_position = position
+            while ! @next_position[position].nil?
+                position = @next_position[position]
             end
-            if ! @circle[position].nil?
-                return position
-            end
+            @next_position[starting_dead_position] = position
         end
+        position
     end
 
     def steal_position
