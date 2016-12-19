@@ -15,4 +15,8 @@ class TestTwo < Test::Unit::TestCase
                      (1..20).map{|n| solve_analytically(n)}
     end
 
+    def test_the_two_solutions_are_equal
+        assert (1..100).all?{|n| solve(n) == solve_analytically(n)}
+    end
+
 end
