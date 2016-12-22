@@ -8,4 +8,8 @@ module Enumerable
         end
     end
 
+    def sum
+        reduce(0, :+)
+    end
+
 end

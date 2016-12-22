@@ -13,5 +13,11 @@ class TestEnumerableUtil < Test::Unit::TestCase
                      'abracadabra'.each_char.frequencies)
     end
 
+    def test_sum
+        assert_equal 0, [].sum
+        assert_equal 4, [2, 2].sum
+        assert_equal 100 * 101 / 2, (1..100).sum
+    end
+
 end
 
