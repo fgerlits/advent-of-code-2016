@@ -11,43 +11,73 @@ class Computer
 
     def run
         while @ip >= 0 && @ip < @program.size
-            @program[@ip].instruction.call(self)
+            @program[@ip].call(self)
         end
     end
 end
 
-class Instruction
-    attr_reader :instruction
+def is_register(word)
+    word.size == 1 && 'a' <= word && word <= 'd'
+end
 
+def is_number(word)
+    word =~ /-?\d+/
+end
+
+class Instruction
     def initialize(line)
         case line
-            when /cpy (\d+) (\w+)/
-                @instruction = lambda do |computer|
-                    computer.registers[$2] = $1.to_i
-                    computer.ip += 1
+            when /cpy (\S+) (\S+)/
+                @instruction = :copy
+                @x, @y = $1, $2
+            when /inc (\S+)/
+                @instruction = :increment
+                @x = $1
+            when /dec (\S+)/
+                @instruction = :decrement
+                @x = $1
+            when /jnz (\S+) (\S+)/
+                @instruction = :jump_non_zero
+                @x, @y = $1, $2
+        end
+    end
+
+    def call(computer)
+        case @instruction
+            when :copy
+                if is_register(@y)
+                    if is_register(@x)
+                        computer.registers[@y] = computer.registers[@x]
+                    elsif is_number(@x)
+                        computer.registers[@y] = @x.to_i
+                    end
                 end
-            when /cpy (\w+) (\w+)/
-                @instruction = lambda do |computer|
-                    computer.registers[$2] = computer.registers[$1]
-                    computer.ip += 1
+                computer.ip += 1
+
+            when :increment
+                if is_register(@x)
+                    computer.registers[@x] += 1
                 end
-            when /inc (\w+)/
-                @instruction = lambda do |computer|
-                    computer.registers[$1] += 1
-                    computer.ip += 1
+                computer.ip += 1
+
+            when :decrement
+                if is_register(@x)
+                    computer.registers[@x] -= 1
                 end
-            when /dec (\w+)/
-                @instruction = lambda do |computer|
-                    computer.registers[$1] -= 1
-                    computer.ip += 1
-                end
-            when /jnz (\w+) (-?\d+)/
-                @instruction = lambda do |computer|
-                    if computer.registers[$1] != 0
-                        computer.ip += $2.to_i
+                computer.ip += 1
+
+            when :jump_non_zero
+                if is_register(@x) && computer.registers[@x] != 0 \
+                                 || is_number(@x) && @x.to_i != 0
+                    if is_register(@y)
+                        computer.ip += computer.registers[@y]
+                    elsif is_number(@y)
+                        computer.ip += @y.to_i
                     else
                         computer.ip += 1
                     end
+                else
+                    computer.ip += 1
                 end
         end
     end

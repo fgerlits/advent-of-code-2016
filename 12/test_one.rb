@@ -25,39 +25,39 @@ class TestInstruction < Test::Unit::TestCase
     end
 
     def test_copy_integer
-        Instruction.new('cpy 41 a').instruction.call(@computer)
+        Instruction.new('cpy 41 a').call(@computer)
         assert_equal 41, @computer.registers['a']
         assert_equal 1, @computer.ip
     end
 
     def test_copy_register
         @computer.registers['a'] = 7
-        Instruction.new('cpy a b').instruction.call(@computer)
+        Instruction.new('cpy a b').call(@computer)
         assert_equal 7, @computer.registers['b']
         assert_equal 1, @computer.ip
     end
 
     def test_increment
-        Instruction.new('inc c').instruction.call(@computer)
+        Instruction.new('inc c').call(@computer)
         assert_equal 1, @computer.registers['c']
         assert_equal 1, @computer.ip
     end
 
     def test_decrement
-        Instruction.new('dec d').instruction.call(@computer)
+        Instruction.new('dec d').call(@computer)
         assert_equal -1, @computer.registers['d']
         assert_equal 1, @computer.ip
     end
 
     def test_jump_when_non_zero
         @computer.registers['a'] = 1
-        Instruction.new('jnz a 2').instruction.call(@computer)
+        Instruction.new('jnz a 2').call(@computer)
         assert_equal 2, @computer.ip
     end
 
     def test_dont_jump_when_zero
         @computer.registers['a'] = 0
-        Instruction.new('jnz a 2').instruction.call(@computer)
+        Instruction.new('jnz a 2').call(@computer)
         assert_equal 1, @computer.ip
     end
 end
