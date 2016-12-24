@@ -35,7 +35,6 @@ struct Graph
 {
     size_t size;
     vertex_type start;
-    vertex_type finish;
     std::vector<Edge> edges;
 };
 
@@ -44,12 +43,9 @@ Graph process_input()
     size_t n;
     std::cin >> n;
 
-    vertex_type start, finish;
-    std::cin >> start >> finish;
-
     std::istream_iterator<Edge> begin{std::cin}, end;
 
-    return Graph{n, start, finish, {begin, end}};
+    return Graph{n, 0, {begin, end}};
 }
 
 struct Node
