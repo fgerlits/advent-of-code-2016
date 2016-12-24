@@ -9,10 +9,7 @@ namespace
         std::getline(std::cin, first_line);
         std::istringstream iss{first_line};
         std::istream_iterator<vertex_type> begin{iss}, end;
-
-        std::vector<vertex_type> special_locations;
-        std::copy(begin, end, std::back_inserter(special_locations));
-        return special_locations;
+        return {begin, end};
     }
 
     void print_distances_to_locations(row_type const& distances, std::vector<vertex_type> const& locations)
