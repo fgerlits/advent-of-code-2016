@@ -1,13 +1,9 @@
 #!/usr/bin/env ruby
 
+require_relative '../enumerable-util'
+
 def cost(route, matrix)
-    current = 0
-    cost = 0
-    route.each do |location|
-        cost += matrix[current][location]
-        current = location
-    end
-    cost
+    ([0] + route).each_cons(2).map{|from, to| matrix[from][to]}.sum
 end
 
 def find_shortest_route(matrix)
